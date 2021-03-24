@@ -58,6 +58,15 @@ namespace WebAPI
             {
                 new CoreModule()
             }) ;
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("CoreSwagger", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "Car Rental API Documentation",
+                    Version = "0.1.0"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +79,8 @@ namespace WebAPI
 
             app.UseRouting();
 
+           
+
             app.UseStaticFiles();
 
             app.UseAuthentication();
@@ -79,6 +90,11 @@ namespace WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(option => {
+                option.SwaggerEndpoint("/swagger/CoreSwagger/swagger.json", "Swagger Car Rental");
             });
         }
     }

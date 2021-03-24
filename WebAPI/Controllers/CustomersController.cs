@@ -65,6 +65,7 @@ namespace WebAPI.Controllers
             return Ok(result.Message);
         }
 
+        [HttpPost]
         public IActionResult Add(Customer customer)
         {
             var result = _customerService.Add(customer);
