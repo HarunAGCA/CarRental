@@ -14,6 +14,8 @@ namespace DataAccess.Concrete.EntityFramework.Configurations
             builder.HasKey(oc => oc.Id);
             builder.Property(oc => oc.Name).HasMaxLength(500);
             builder.Property(oc => oc.Name).IsRequired();
+
+            builder.HasData(new OperationClaim { Id = 1, Name = "admin" });
         }
     }
 }

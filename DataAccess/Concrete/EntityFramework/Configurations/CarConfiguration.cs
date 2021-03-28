@@ -18,6 +18,37 @@ namespace DataAccess.Concrete.EntityFramework.Configurations
             builder.Property(c => c.Name).IsRequired();
             builder.Property(c => c.ModelYear).IsRequired();
             builder.Property(c => c.Description).IsRequired();
+
+            builder.HasData(new Car
+            {
+                Id = 1,
+                BrandId = 1,
+                ColorId = 1,
+                Name = "SUV",
+                DailyPrice = 250M,
+                ModelYear = 2022,
+                Description = "TOGG SUV model kırmızı"
+            },
+            new Car
+            {
+                Id = 2,
+                BrandId = 1,
+                ColorId = 2,
+                Name = "SUV",
+                DailyPrice = 250M,
+                ModelYear = 2022,
+                Description = "TOGG SUV model mavi"
+            }, new Car
+            {
+                Id = 3,
+                BrandId = 1,
+                ColorId = 3,
+                Name = "Sedan",
+                DailyPrice = 200M,
+                ModelYear = 2022,
+                Description = "TOGG Sedan gri"
+            }
+            );
         }
     }
 }

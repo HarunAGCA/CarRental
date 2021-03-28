@@ -15,6 +15,8 @@ namespace DataAccess.Concrete.EntityFramework.Configurations
             builder.Property(c => c.CarId).IsRequired();
             builder.Property(c => c.CustomerId).IsRequired();
             builder.Property(c => c.RentDate).IsRequired();
+
+            builder.HasData(new Rental { Id = 1, CarId = 2, CustomerId = 1, RentDate = DateTime.Now.AddDays(5) });
         }
     }
 }

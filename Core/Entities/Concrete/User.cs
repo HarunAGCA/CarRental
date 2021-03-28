@@ -20,5 +20,7 @@ namespace Core.Entities.Concrete
 
         public bool IsBlocked { get; set; }
 
+        public List<UserOperationClaim> UserOperationClaims { get; set; }
+
     }
 }

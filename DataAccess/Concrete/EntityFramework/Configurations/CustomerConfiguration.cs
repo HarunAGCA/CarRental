@@ -14,6 +14,9 @@ namespace DataAccess.Concrete.EntityFramework.Configurations
             builder.HasKey(c=>c.UserId);
             builder.Property(c => c.UserId).ValueGeneratedNever();
             builder.Property(c => c.CompanyName).IsRequired();
+            builder.HasOne(c => c.User).WithOne();
+
+            builder.HasData(new Customer { UserId = 1, CompanyName = "AGCA" });
         }
     }
 }

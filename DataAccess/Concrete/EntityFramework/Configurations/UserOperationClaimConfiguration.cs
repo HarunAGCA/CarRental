@@ -14,6 +14,8 @@ namespace DataAccess.Concrete.EntityFramework.Configurations
             builder.HasKey(uoc => uoc.Id);
             builder.Property(uoc => uoc.UserId).IsRequired();
             builder.Property(uoc => uoc.OperationClaimId).IsRequired();
+
+            builder.HasData(new UserOperationClaim { Id = 1, UserId = 1, OperationClaimId = 1 });
         }
     }
 }

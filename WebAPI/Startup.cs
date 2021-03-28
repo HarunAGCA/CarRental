@@ -78,7 +78,7 @@ namespace WebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.AddAdminUserIfNotExist(authService, userService);
+           // app.AddAdminUserIfNotExist(authService, userService);
 
             app.UseRouting();
 

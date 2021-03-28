@@ -14,5 +14,7 @@ namespace Entities.Concrete
         public string FileName { get; set; }
 
         public DateTime UploadDate { get; set; }
+
+        public Car Car { get; set; }
     }
 }
