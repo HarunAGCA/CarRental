@@ -96,6 +96,7 @@ namespace WebAPI
             app.UseSwagger();
             app.UseSwaggerUI(option => {
                 option.SwaggerEndpoint("/swagger/CoreSwagger/swagger.json", "Swagger Car Rental");
+                option.RoutePrefix = string.Empty;
             });
         }
     }
