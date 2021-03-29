@@ -23,9 +23,9 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        [ValidationAspect(typeof(ColorValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IColorService.Get")]
+        [ValidationAspect(typeof(ColorValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IColorService.Get", Priority = 3)]
         [SecuredOperation("admin")]
         public IResult Add(Color color)
         {
@@ -33,8 +33,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ColorAdded);
         }
 
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IColorService.Get")]
+        [TransactionScopeAspect(Priority = 1)]
+        [CacheRemoveAspect("IColorService.Get", Priority = 2)]
         [SecuredOperation("admin")]
         public IResult Delete(short colorId)
         {
@@ -63,9 +63,9 @@ namespace Business.Concrete
 
         }
 
-        [ValidationAspect(typeof(ColorValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IColorService.Get")]
+        [ValidationAspect(typeof(ColorValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IColorService.Get", Priority = 3)]
         [SecuredOperation("admin")]
         public IResult Update(Color updatedColor)
         {

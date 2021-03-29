@@ -24,9 +24,9 @@ namespace Business.Concrete
             _userService = userService;
         }
 
-        [ValidationAspect(typeof(CustomerValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("ICustomerService.Get")]
+        [ValidationAspect(typeof(CustomerValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("ICustomerService.Get", Priority = 3)]
         public IResult Add(Customer customer)
         {
             if (!_userService.IsUserExist(customer.UserId))
@@ -43,8 +43,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CustomerAdded);
         }
 
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IColorService.Get")]
+        [TransactionScopeAspect(Priority = 1)]
+        [CacheRemoveAspect("IColorService.Get", Priority = 2)]
         public IResult Delete(int customerId)
         {
             if (!_customerDal.GetList(c => c.UserId == customerId).Any())
@@ -73,9 +73,9 @@ namespace Business.Concrete
             return new SuccessDataResult<Customer>(Messages.CustomerReceived, customer);
         }
 
-        [ValidationAspect(typeof(CustomerValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IColorService.Get")]
+        [ValidationAspect(typeof(CustomerValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IColorService.Get", Priority = 3)]
         public IResult Update(Customer customer)
         {
             if (!_customerDal.GetList(c => c.UserId == customer.UserId).Any())

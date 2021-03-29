@@ -27,8 +27,8 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarValidator), Priority = 1)]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("ICarService.Get")]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("ICarService.Get", Priority = 2)]
         [SecuredOperation("admin")]
         public IResult Add(Car car)
         {
@@ -37,8 +37,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarAdded);
         }
 
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("ICarService.Get")]
+        [TransactionScopeAspect(Priority = 1)]
+        [CacheRemoveAspect("ICarService.Get", Priority = 2)]
         [SecuredOperation("admin")]
         public IResult Delete(int id)
         {
@@ -110,9 +110,9 @@ namespace Business.Concrete
             return new SuccessDataResult<bool>(true);
         }
 
-        [ValidationAspect(typeof(CarValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("ICarService.Get")]
+        [ValidationAspect(typeof(CarValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("ICarService.Get", Priority = 3)]
         [SecuredOperation("admin")]
         public IResult Update(Car car)
         {

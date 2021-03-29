@@ -22,9 +22,9 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
-        [ValidationAspect(typeof(UserValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(UserValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IUserService.Get", Priority = 3)]
         public IResult Add(User user)
         {
             _userDal.Add(user);
@@ -45,7 +45,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(Messages.UserReceived, user);
         }
 
-        [ValidationAspect(typeof(UserValidator))]
+        [ValidationAspect(typeof(UserValidator), Priority = 1)]
        // [CacheAspect]
         public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
@@ -66,9 +66,9 @@ namespace Business.Concrete
             return user != null ? true : false;
         }
 
-        [ValidationAspect(typeof(UserValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IUserService.Get")]
+        [ValidationAspect(typeof(UserValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IUserService.Get", Priority = 3)]
         public IResult Update(User user)
         {
             _userDal.Update(user);

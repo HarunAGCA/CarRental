@@ -28,8 +28,8 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(UserForRegisterDtoValidator), Priority =1)]
-        [TransactionScopeAspect]
-        [PerformanceAspect(1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [PerformanceAspect(1,Priority = 3)]
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto)
         {
             byte[] passwordHash, passwordSalt;
@@ -49,7 +49,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(Messages.UserRegistered,user);
         }
 
-        [ValidationAspect(typeof(UserForLoginDtoValidator))]
+        [ValidationAspect(typeof(UserForLoginDtoValidator), Priority = 1)]
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
             var userToCheck = _userService.GetByMail(userForLoginDto.Email);
@@ -77,7 +77,7 @@ namespace Business.Concrete
             return new SuccessDataResult<bool>(false);
         }
 
-        [ValidationAspect(typeof(UserValidator))]
+        [ValidationAspect(typeof(UserValidator), Priority = 1)]
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user);

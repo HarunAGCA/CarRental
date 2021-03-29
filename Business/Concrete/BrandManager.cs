@@ -23,9 +23,9 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
-        [ValidationAspect(typeof(BrandValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IBrandService.Get")]
+        [ValidationAspect(typeof(BrandValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IBrandService.Get",Priority =3)]
         [SecuredOperation("admin")]
         public IResult Add(Brand brand)
         {
@@ -34,8 +34,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.BrandAdded);
         }
 
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IBrandService.Get")]
+        [TransactionScopeAspect(Priority = 1)]
+        [CacheRemoveAspect("IBrandService.Get", Priority = 2)]
         [SecuredOperation("admin")]
         public IResult Delete(short brandId)
         {
@@ -67,9 +67,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Brand>>(Messages.BrandsListed,data);
         }
 
-        [ValidationAspect(typeof(BrandValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IBrandService.Get")]
+        [ValidationAspect(typeof(BrandValidator),Priority =1)]
+        [TransactionScopeAspect(Priority =2)]
+        [CacheRemoveAspect("IBrandService.Get",Priority =3)]
         [SecuredOperation("admin")]
         public IResult Update(Brand updatedBrand)
         {

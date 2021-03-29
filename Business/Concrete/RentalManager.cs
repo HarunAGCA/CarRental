@@ -27,9 +27,9 @@ namespace Business.Concrete
             _carService = carService;
         }
 
-        [ValidationAspect(typeof(RentalValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IRentalService.Get")]
+        [ValidationAspect(typeof(RentalValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IRentalService.Get", Priority = 3)]
         public IResult Add(Rental rental)
         {
             bool isCarExists = _carService.IsExists(rental.CarId).Data;
@@ -50,9 +50,9 @@ namespace Business.Concrete
 
         }
 
-        [ValidationAspect(typeof(RentalDeliverDtoValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IRentalService.Get")]
+        [ValidationAspect(typeof(RentalDeliverDtoValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IRentalService.Get", Priority = 3)]
         public IResult Deliver(RentalDeliverDto rentalDeliverDto)
         {
             var rental = _rentalDal.Get(r => r.Id == rentalDeliverDto.RentalId);
@@ -84,9 +84,9 @@ namespace Business.Concrete
             }
         }
 
-        [ValidationAspect(typeof(RentalValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("IRentalService.Get")]
+        [ValidationAspect(typeof(RentalValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("IRentalService.Get", Priority = 3)]
         public IResult Update(Rental rental)
         {
             _rentalDal.Update(rental);

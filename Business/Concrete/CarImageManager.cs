@@ -28,9 +28,9 @@ namespace Business.Concrete
         }
 
         //TODO Test that if aspects are runnig by written order
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("ICarImageService.Get")]
-        [ValidationAspect(typeof(AddCarImageDtoValidator))]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("ICarImageService.Get", Priority = 3)]
+        [ValidationAspect(typeof(AddCarImageDtoValidator), Priority = 1)]
         [SecuredOperation("admin")]
         public IResult Add(AddCarImageDto addCarImageDto)
         {
@@ -65,8 +65,8 @@ namespace Business.Concrete
             return new SuccessResult(Messages.CarImagesAdded);
         }
 
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("ICarImageService.Get")]
+        [TransactionScopeAspect(Priority = 1)]
+        [CacheRemoveAspect("ICarImageService.Get", Priority = 2)]
         [SecuredOperation("admin")]
         public IResult Delete(int id)
         {
@@ -118,9 +118,9 @@ namespace Business.Concrete
                 );
         }
 
-        [ValidationAspect(typeof(UpdateCarImageDtoValidator))]
-        [TransactionScopeAspect]
-        [CacheRemoveAspect("ICarImageService.Get")]
+        [ValidationAspect(typeof(UpdateCarImageDtoValidator), Priority = 1)]
+        [TransactionScopeAspect(Priority = 2)]
+        [CacheRemoveAspect("ICarImageService.Get", Priority = 3)]
         [SecuredOperation("admin")]
         public IResult Update(UpdateCarImageDto updateCarImageDto)
         {
