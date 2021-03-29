@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DataAccess.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +13,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<short>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -25,7 +26,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<short>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -38,7 +39,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 500, nullable: false)
                 },
                 constraints: table =>
@@ -51,7 +52,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
                     Email = table.Column<string>(nullable: false),
@@ -69,7 +70,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BrandId = table.Column<short>(nullable: false),
                     ColorId = table.Column<short>(nullable: false),
                     Name = table.Column<string>(nullable: false),
@@ -117,7 +118,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(nullable: false),
                     OperationClaimId = table.Column<int>(nullable: false)
                 },
@@ -143,7 +144,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CarId = table.Column<int>(nullable: false),
                     FileName = table.Column<string>(nullable: false),
                     UploadDate = table.Column<DateTime>(nullable: false)
@@ -164,7 +165,7 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CustomerId = table.Column<int>(nullable: false),
                     CarId = table.Column<int>(nullable: false),
                     RentDate = table.Column<DateTime>(nullable: false),
@@ -237,24 +238,24 @@ namespace DataAccess.Migrations
                 columns: new[] { "Id", "CarId", "FileName", "UploadDate" },
                 values: new object[,]
                 {
-                    { 1, 1, "9c51a451-ac2b-4840-81cb-e9447bf97441.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 562, DateTimeKind.Local).AddTicks(6564) },
-                    { 2, 1, "62343bd3-b600-4911-ba92-a3e92460c91b.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7693) },
-                    { 3, 1, "e855898a-5e19-4e9e-82fa-421a884b353a.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7731) },
-                    { 4, 1, "f16ec7fb-bcfa-49b6-accc-87e92b6d3cc3.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7734) },
-                    { 5, 2, "3fa88654-2976-4cff-948c-e3e20c730c91.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7736) },
-                    { 6, 2, "7a6f413f-0d74-4584-89a2-ff7898a8623d.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7738) },
-                    { 7, 2, "2135828c-09f7-4c6a-a5df-3a137c9a138a.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7739) },
-                    { 8, 2, "ee9d8d7e-d89b-4d70-b012-4aa241fca70a.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7741) },
-                    { 9, 3, "33959098-8427-4200-bd6e-823c2890ff10.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7742) },
-                    { 10, 3, "c300ab97-d45f-439c-90b8-fd09a9426cc4.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7744) },
-                    { 11, 3, "2cca89e4-a7a4-44fe-b8ac-f50872a1395b.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7745) },
-                    { 12, 3, "af969d12-5a14-488d-8509-796efb2bd0b3.jpg", new DateTime(2021, 3, 29, 12, 48, 25, 563, DateTimeKind.Local).AddTicks(7747) }
+                    { 1, 1, "9c51a451-ac2b-4840-81cb-e9447bf97441.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 811, DateTimeKind.Local).AddTicks(5678) },
+                    { 2, 1, "62343bd3-b600-4911-ba92-a3e92460c91b.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6591) },
+                    { 3, 1, "e855898a-5e19-4e9e-82fa-421a884b353a.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6635) },
+                    { 4, 1, "f16ec7fb-bcfa-49b6-accc-87e92b6d3cc3.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6637) },
+                    { 5, 2, "3fa88654-2976-4cff-948c-e3e20c730c91.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6639) },
+                    { 6, 2, "7a6f413f-0d74-4584-89a2-ff7898a8623d.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6640) },
+                    { 7, 2, "2135828c-09f7-4c6a-a5df-3a137c9a138a.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6642) },
+                    { 8, 2, "ee9d8d7e-d89b-4d70-b012-4aa241fca70a.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6643) },
+                    { 9, 3, "33959098-8427-4200-bd6e-823c2890ff10.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6645) },
+                    { 10, 3, "c300ab97-d45f-439c-90b8-fd09a9426cc4.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6646) },
+                    { 11, 3, "2cca89e4-a7a4-44fe-b8ac-f50872a1395b.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6648) },
+                    { 12, 3, "af969d12-5a14-488d-8509-796efb2bd0b3.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6649) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Rentals",
                 columns: new[] { "Id", "CarId", "CustomerId", "RentDate", "ReturnDate" },
-                values: new object[] { 1, 2, 1, new DateTime(2021, 4, 3, 12, 48, 25, 581, DateTimeKind.Local).AddTicks(6413), null });
+                values: new object[] { 1, 2, 1, new DateTime(2021, 4, 3, 15, 30, 24, 831, DateTimeKind.Local).AddTicks(1659), null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarImages_CarId",

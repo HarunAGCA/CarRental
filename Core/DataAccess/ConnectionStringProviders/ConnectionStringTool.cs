@@ -34,7 +34,7 @@ namespace Core.DataAccess.ConnectionStringProviders
 
         public static string GetConnectionStringDevelopment()
         {
-            return @"Server=(localdb)\MSSQLLocalDB; Database=CarRental; Integrated Security=true;";
+            return @"Server=127.0.0.1; port=5432;Database=CarRental; user id=postgres;password=postgres;";
         }
     }
 }

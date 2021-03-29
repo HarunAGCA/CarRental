@@ -1,4 +1,5 @@
-﻿using Core.Entities.Concrete;
+﻿using Core.DataAccess.ConnectionStringProviders;
+using Core.Entities.Concrete;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,14 +13,14 @@ namespace DataAccess.Concrete.EntityFramework
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB; Database=CarRental; Integrated Security=true;");
+            optionsBuilder.UseNpgsql(ConnectionStringTool.GetConnectionStringFromHerokuContainer());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CarRentalContext).Assembly);
         }
-
+        
         public DbSet<Car> Cars { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Color> Colors { get; set; }
