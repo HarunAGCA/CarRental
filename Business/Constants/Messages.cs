@@ -49,7 +49,7 @@ namespace Business.Constants
         internal static readonly string PasswordError = "Şifre Hatalı";
         internal static readonly string UserNotFound = "Kullanıcı Bulunamadı";
         internal static readonly string UserRegistered = "Kullanıcı Kaydedildi";
-        internal static readonly string AuthorizationDenied = "Yetkilendirme Engellendi";
+        internal static readonly string AuthorizationDenied = "Bu İşlem İçin Yetkiniz Yok";
         internal static readonly string CustomerDeleted ="Müşteri Silindi";
         internal static readonly string CustomerUpdated ="Müşteri Güncellendi";
         internal static readonly string CarNotFound = "Araç Bulunamadı";
@@ -60,7 +60,7 @@ namespace Business.Constants
         internal static readonly string CarImageDeleted = "Araç Fotoğrafı Silindi";
         internal static readonly string CarImageNotFound= "Araç Fotoğrafı Bulunamadı";
         internal static readonly string CarImageUpdated = "Araç Fotoğrafı Güncellendi";
-        internal static readonly string CarImageLimitExceeded = "Araç Fotoğraf Sayısı Aşıldı";
+        internal static readonly string CarImageLimitExceeded = "Araç Fotoğraf Sayısı Limiti Aşıldı";
         internal static readonly string CarImageCouldNotAdded = "Araç Fotğrafı Eklenemedi";
         internal static readonly string CarImagesAdded = "Araç Fotoğrafları Eklendi";
         internal static readonly string CarImageCouldNotUpdated = "Araç Fotoğrafı Güncellenemedi";

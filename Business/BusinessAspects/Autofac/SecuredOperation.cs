@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Core.Utilities.Exceptions;
 
 namespace Business.BusinessAspects.Autofac
 {
@@ -33,7 +34,7 @@ namespace Business.BusinessAspects.Autofac
                     return;
                 }
             }
-            throw new Exception(Messages.AuthorizationDenied);
+            throw new AuthorizationException(Messages.AuthorizationDenied);
         }
     }
 }

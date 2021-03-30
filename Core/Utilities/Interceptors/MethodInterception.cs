@@ -1,6 +1,10 @@
 ﻿using Castle.DynamicProxy;
+using Core.Utilities.Exceptions;
+using Core.Utilities.Results;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Core.Utilities.Interceptors
@@ -14,10 +18,32 @@ namespace Core.Utilities.Interceptors
         public override void Intercept(IInvocation invocation)
         {
             var isSuccess = true;
-            OnBefore(invocation);
             try
             {
+                OnBefore(invocation);
                 invocation.Proceed();
+            }
+            catch (ValidationException validationException)
+            {
+                var returnType = invocation.Method.ReturnType;
+                if (returnType.GenericTypeArguments.Any())
+                {
+                    invocation.ReturnValue = Activator.CreateInstance(Type.GetType($"Core.Utilities.Results.ErrorDataResult`1[{returnType.GenericTypeArguments[0].FullName}]"), validationException.Message);
+                    return;
+                }
+                invocation.ReturnValue = new ErrorResult(validationException.Message);
+                return;
+            }
+            catch (AuthorizationException authorizationException)
+            {
+                var returnType = invocation.Method.ReturnType;
+                if (returnType.GenericTypeArguments.Any())
+                {
+                    invocation.ReturnValue = Activator.CreateInstance(Type.GetType($"Core.Utilities.Results.ErrorDataResult`1[{returnType.GenericTypeArguments[0].FullName}]"), authorizationException.Message);
+                    return;
+                }
+                invocation.ReturnValue = new ErrorResult(authorizationException.Message);
+                return;
             }
             catch (Exception e)
             {
