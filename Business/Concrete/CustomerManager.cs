@@ -7,6 +7,7 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,10 @@ namespace Business.Concrete
             _userService = userService;
         }
 
-        [ValidationAspect(typeof(CustomerValidator), Priority = 1)]
+        [ValidationAspect(typeof(CustomerDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("ICustomerService.Get", Priority = 3)]
-        public IResult Add(Customer customer)
+        public IResult Add(CustomerDto customer)
         {
             if (!_userService.IsUserExist(customer.UserId))
             {
@@ -39,7 +40,7 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CustomerAlreadyExist);
             }
 
-            _customerDal.Add(customer);
+            _customerDal.Add(new Customer { UserId = customer.UserId, CompanyName = customer.CompanyName });
             return new SuccessResult(Messages.CustomerAdded);
         }
 
@@ -57,33 +58,44 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<List<Customer>> GetAll()
+        public IDataResult<List<CustomerDto>> GetAll()
         {
-            return new SuccessDataResult<List<Customer>>(_customerDal.GetList());
+            var result = _customerDal.GetList();
+
+            List<CustomerDto> customers = new List<CustomerDto>();
+
+            foreach (var customer in result)
+            {
+                customers.Add(
+                    new CustomerDto { UserId = customer.UserId, CompanyName = customer.CompanyName });
+            }
+
+            return new SuccessDataResult<List<CustomerDto>>(customers);
         }
 
         [CacheAspect]
-        public IDataResult<Customer> GetByUserId(int userId)
+        public IDataResult<CustomerDto> GetByUserId(int userId)
         {
-            var customer = _customerDal.Get(c => c.UserId == userId);
+            var result = _customerDal.Get(c => c.UserId == userId);
 
-            if (customer == null)
-                return new ErrorDataResult<Customer>(Messages.CustomerNotFound);
+            if (result == null)
+                return new ErrorDataResult<CustomerDto>(Messages.CustomerNotFound);
 
-            return new SuccessDataResult<Customer>(Messages.CustomerReceived, customer);
+            return new SuccessDataResult<CustomerDto>(Messages.CustomerReceived, new CustomerDto { UserId = result.UserId, CompanyName = result.CompanyName });
         }
 
-        [ValidationAspect(typeof(CustomerValidator), Priority = 1)]
+        [ValidationAspect(typeof(CustomerDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("IColorService.Get", Priority = 3)]
-        public IResult Update(Customer customer)
+        public IResult Update(CustomerDto customer)
         {
             if (!_customerDal.GetList(c => c.UserId == customer.UserId).Any())
             {
                 return new ErrorResult(Messages.UserNotFound);
             }
 
-            _customerDal.Update(customer);
+            _customerDal.Update(new Customer { UserId = customer.UserId, CompanyName = customer.CompanyName });
+
             return new SuccessResult(Messages.CustomerUpdated);
 
         }

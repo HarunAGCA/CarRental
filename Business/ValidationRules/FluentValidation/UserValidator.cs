@@ -10,9 +10,9 @@ namespace Business.ValidationRules.FluentValidation
     {
         public UserValidator()
         {
-            RuleFor(u => u.Email).EmailAddress();
-            RuleFor(u => u.FirstName).NotEmpty();
-            RuleFor(u => u.LastName).NotEmpty();
+            RuleFor(u => u.Email).EmailAddress().WithMessage("Mail Adresi Geçersiz");
+            RuleFor(u => u.FirstName).NotEmpty().WithMessage("Ad Boş Olamaz");
+            RuleFor(u => u.LastName).NotEmpty().WithMessage("Soyad Boş Olamaz");
         }
     }
 }

@@ -6,12 +6,13 @@ using System.Text;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    class CustomerValidator:AbstractValidator<Customer>
+    class CustomerDtoValidator:AbstractValidator<Customer>
     {
-        public CustomerValidator()
+        public CustomerDtoValidator()
         {
             RuleFor(c => c.CompanyName)
-                .NotEmpty();
+                .MinimumLength(2)
+                .WithMessage("Firma Adı En Az 2 Karakter Olmalıdır");
 
             RuleFor(c => c.UserId)
                 .NotEmpty();

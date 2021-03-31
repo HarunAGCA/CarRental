@@ -11,16 +11,20 @@ namespace Business.ValidationRules.FluentValidation
         public UserForRegisterDtoValidator()
         {
             RuleFor(u => u.Email)
-                .EmailAddress();
+                .EmailAddress()
+                .WithMessage("Mail Adresi Geçersiz");
 
             RuleFor(u => u.FirstName)
-                .NotEmpty();
+                .MinimumLength(2)
+                .WithMessage("Ad En Az İki Karakter Olmalı");
 
             RuleFor(u => u.LastName)
-                .NotEmpty();
+                .MinimumLength(2)
+                .WithMessage("Soyad En Az İki Karakter Olmalı"); ;
 
             RuleFor(u => u.Password)
-                .MinimumLength(8);
+                .MinimumLength(8)
+                .WithMessage("Şifre En Az 8 Karakterden Oluşmalı");
         }
     }
 }

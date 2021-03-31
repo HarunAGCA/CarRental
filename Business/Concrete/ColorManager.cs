@@ -8,6 +8,7 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,13 +24,17 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        [ValidationAspect(typeof(ColorValidator), Priority = 1)]
+        [ValidationAspect(typeof(ColorAddDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("IColorService.Get", Priority = 3)]
         [SecuredOperation("admin")]
-        public IResult Add(Color color)
+        public IResult Add(ColorAddDto color)
         {
-            _colorDal.Add(color);
+            if (IsExistsByName(color.Name).Data)
+            {
+                return new ErrorResult(Messages.ColorAlreadyExists);
+            }
+            _colorDal.Add(new Color { Name = color.Name });
             return new SuccessResult(Messages.ColorAdded);
         }
 
@@ -38,7 +43,7 @@ namespace Business.Concrete
         [SecuredOperation("admin")]
         public IResult Delete(short colorId)
         {
-            if(_colorDal.Get(c=>c.Id == colorId) == null)
+            if (_colorDal.Get(c => c.Id == colorId) == null)
             {
                 return new ErrorResult(Messages.ColorNotFound);
             }
@@ -48,28 +53,62 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<Color> Get(short colorId)
+        public IDataResult<ColorReturnDto> Get(short colorId)
         {
             var data = _colorDal.Get(c => c.Id == colorId);
-            return new SuccessDataResult<Color>(Messages.ColorReceived, data);
+            if (data == null)
+                return new ErrorDataResult<ColorReturnDto>(Messages.ColorNotFound);
+
+            return new SuccessDataResult<ColorReturnDto>(new ColorReturnDto { Id = data.Id, Name = data.Name });
         }
 
         [CacheAspect]
-        public IDataResult<List<Color>> GetAll()
+        public IDataResult<List<ColorReturnDto>> GetAll()
         {
-            var data = _colorDal.GetList();
+            var result = _colorDal.GetList();
 
-            return new SuccessDataResult<List<Color>>(Messages.ColorsListed,data);
+            List<ColorReturnDto> colors = new List<ColorReturnDto>();
+
+            foreach (var color in result)
+            {
+                colors.Add(new ColorReturnDto
+                {
+                    Id = color.Id,
+                    Name = color.Name
+                });
+            }
+
+            return new SuccessDataResult<List<ColorReturnDto>>(Messages.ColorsListed, colors);
 
         }
 
-        [ValidationAspect(typeof(ColorValidator), Priority = 1)]
+        public IDataResult<bool> IsExists(short id)
+        {
+            var result = _colorDal.Get(c => c.Id == id);
+            if (result == null)
+                return new SuccessDataResult<bool>(false);
+            else
+                return new SuccessDataResult<bool>(true);
+        }
+
+        public IDataResult<bool> IsExistsByName(string colorName)
+        {
+            var result = _colorDal.Get(c => c.Name.ToLower() == colorName.ToLower());
+
+            if (result == null)
+                return new SuccessDataResult<bool>(false);
+            else
+                return new SuccessDataResult<bool>(true);
+
+        }
+
+        [ValidationAspect(typeof(ColorUpdateDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("IColorService.Get", Priority = 3)]
         [SecuredOperation("admin")]
-        public IResult Update(Color updatedColor)
+        public IResult Update(ColorUpdateDto updatedColor)
         {
-            _colorDal.Update(updatedColor);
+            _colorDal.Update(new Color { Id = updatedColor.Id, Name = updatedColor.Name });
             return new SuccessResult(Messages.ColorUpdated);
         }
     }

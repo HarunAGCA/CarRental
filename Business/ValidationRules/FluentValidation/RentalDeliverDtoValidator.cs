@@ -11,10 +11,12 @@ namespace Business.ValidationRules.FluentValidation
         public RentalDeliverDtoValidator()
         {
             RuleFor(o=>o.RentalId)
-                .GreaterThan((short)0);
+                .GreaterThan(0)
+                .WithMessage("RentalId Geçersiz");
 
             RuleFor(o => o.ReturnDate)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("Teslim Tarihi Boş Olamaz");
 
             
 

@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,9 +22,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(short id)
         {
-            var result = _colorService.Get((short)id);
+            var result = _colorService.Get(id);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
@@ -41,32 +42,33 @@ namespace WebAPI.Controllers
                 return BadRequest(result.Message);
             return Ok(result.Data);
 
-        } 
+        }
 
         [HttpPost]
         public IActionResult Add(string colorName)
         {
-            var result = _colorService.Add(new Color { Name = colorName });
+            var result = _colorService.Add(new ColorAddDto { Name = colorName });
 
-            if (!result.IsSuccess)
-                return BadRequest(result.Message);
-
-            return Ok(result.Message);//TODO return Created action result
-        }
-
-        [HttpPut]
-        public IActionResult Update(Color updatedColor)
-        {
-            var result = _colorService.Update(updatedColor);
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
 
             return Ok(result.Message);
         }
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+
+        [HttpPut]
+        public IActionResult Update(ColorUpdateDto updatedColor)
         {
-            var result = _colorService.Delete((short)id);
+            var result = _colorService.Update(new ColorUpdateDto { Id = updatedColor.Id, Name = updatedColor.Name });
+            if (!result.IsSuccess)
+                return BadRequest(result.Message);
+
+            return Ok(result.Message);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(short id)
+        {
+            var result = _colorService.Delete(id);
 
             if (!result.IsSuccess)
             {

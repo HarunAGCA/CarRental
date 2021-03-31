@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -44,7 +45,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Customer customer)
+        public IActionResult Update(CustomerDto customer)
         {
             var result = _customerService.Update(customer);
 
@@ -66,14 +67,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Customer customer)
+        public IActionResult Add(CustomerDto customer)
         {
             var result = _customerService.Add(customer);
 
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
 
-            return Ok(result.Message);// TODO return Created Action Result
+            return Ok(result.Message);
         }
     }
 }

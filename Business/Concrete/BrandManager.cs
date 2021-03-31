@@ -8,9 +8,8 @@ using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using System;
+using Entities.DTOs;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Business.Concrete
 {
@@ -23,13 +22,17 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
-        [ValidationAspect(typeof(BrandValidator), Priority = 1)]
+        [ValidationAspect(typeof(BrandAddDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("IBrandService.Get",Priority =3)]
         [SecuredOperation("admin")]
-        public IResult Add(Brand brand)
+        public IResult Add(BrandAddDto brand)
         {
-            _brandDal.Add(brand);
+            if (IsExistsByName(brand.Name).Data)
+            {
+                return new ErrorResult(Messages.BrandAlreadyExists);
+            }
+            _brandDal.Add(new Brand {Name=brand.Name});
 
             return new SuccessResult(Messages.BrandAdded);
         }
@@ -43,6 +46,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.BrandNotFound);
             }
+
             _brandDal.Delete(new Brand { Id = brandId });
 
             return new SuccessResult(Messages.BrandDeleted);
@@ -50,30 +54,49 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<Brand> Get(short brandId)
+        public IDataResult<BrandReturnDto> Get(short brandId)
         {
-            var data = _brandDal.Get(b => b.Id == brandId);
-            if (data == null)
-                return new ErrorDataResult<Brand>(Messages.BrandNotFound);
+            var result = _brandDal.Get(b => b.Id == brandId);
+            if (result == null)
+                return new ErrorDataResult<BrandReturnDto>(Messages.BrandNotFound);
 
-            return new SuccessDataResult<Brand>(Messages.BrandReceived, data);
+            var data = new BrandReturnDto { Id = result.Id, Name = result.Name };
+
+            return new SuccessDataResult<BrandReturnDto>(Messages.BrandReceived, data);
         }
 
         [CacheAspect]
-        public IDataResult<List<Brand>> GetAll()
+        public IDataResult<List<BrandReturnDto>> GetAll()
         {
-            var data=  _brandDal.GetList();
+            var result=  _brandDal.GetList();
 
-            return new SuccessDataResult<List<Brand>>(Messages.BrandsListed,data);
+            var brands = new List<BrandReturnDto>();
+
+            foreach(var brand in result)
+            {
+                brands.Add(new BrandReturnDto { Id = brand.Id, Name = brand.Name });
+            }
+
+            return new SuccessDataResult<List<BrandReturnDto>>(Messages.BrandsListed,brands);
         }
 
-        [ValidationAspect(typeof(BrandValidator),Priority =1)]
+        public IDataResult<bool> IsExistsByName(string name)
+        {
+            var result = _brandDal.Get(b => b.Name.ToLower() == name.ToLower());
+
+            if (result == null)
+                return new SuccessDataResult<bool>(false);
+            else
+                return new SuccessDataResult<bool>(true);
+        }
+
+        [ValidationAspect(typeof(BrandUpdateDtoValidator),Priority =1)]
         [TransactionScopeAspect(Priority =2)]
         [CacheRemoveAspect("IBrandService.Get",Priority =3)]
         [SecuredOperation("admin")]
-        public IResult Update(Brand updatedBrand)
+        public IResult Update(BrandUpdateDto updatedBrand)
         {
-            _brandDal.Update(updatedBrand);
+            _brandDal.Update(new Brand {Id = updatedBrand.Id, Name = updatedBrand.Name });
 
             return new SuccessResult(Messages.BrandUpdated);
         }

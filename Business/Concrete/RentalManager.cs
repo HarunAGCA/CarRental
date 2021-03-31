@@ -27,14 +27,14 @@ namespace Business.Concrete
             _carService = carService;
         }
 
-        [ValidationAspect(typeof(RentalValidator), Priority = 1)]
+        [ValidationAspect(typeof(RentalAddDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("IRentalService.Get", Priority = 3)]
-        public IResult Add(Rental rental)
+        public IResult Add(RentalAddDto rental)
         {
             bool isCarExists = _carService.IsExists(rental.CarId).Data;
 
-            if(!isCarExists)
+            if (!isCarExists)
             {
                 return new ErrorResult(Messages.CarNotFound);
             }
@@ -45,7 +45,9 @@ namespace Business.Concrete
             {
                 return new ErrorResult(failedRule.Message);
             }
-            _rentalDal.Add(rental);
+
+            _rentalDal.Add(new Rental { CarId = rental.CarId, CustomerId = rental.CustomerId, RentDate = rental.RentDate });
+
             return new SuccessResult(Messages.RentalAdded);
 
         }
@@ -63,33 +65,48 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<List<Rental>> GetAll()
+        public IDataResult<List<RentalReturnDto>> GetAll()
         {
-            var rentals = _rentalDal.GetList();
+            var result = _rentalDal.GetList();
 
-            return new SuccessDataResult<List<Rental>>(rentals);
+            List<RentalReturnDto> rentals = new List<RentalReturnDto>();
+
+            foreach (var rental in result)
+            {
+                rentals.Add(new RentalReturnDto { Id = rental.Id, CarId = rental.CarId, CustomerId = rental.CustomerId, RentDate = rental.RentDate, ReturnDate = rental.ReturnDate });
+            }
+
+            return new SuccessDataResult<List<RentalReturnDto>>(rentals);
         }
 
         [CacheAspect]
-        public IDataResult<Rental> GetRentalById(int id)
+        public IDataResult<RentalReturnDto> GetRentalById(int id)
         {
             var rental = _rentalDal.Get(r => r.Id == id);
             if (rental != null)
             {
-                return new SuccessDataResult<Rental>(Messages.RentalReceived, rental);
+                return new SuccessDataResult<RentalReturnDto>(Messages.RentalReceived,
+                    new RentalReturnDto
+                    {
+                        Id = rental.Id,
+                        CarId = rental.CarId,
+                        CustomerId = rental.CustomerId,
+                        RentDate = rental.RentDate,
+                        ReturnDate = rental.ReturnDate
+                    });
             }
             else
             {
-                return new ErrorDataResult<Rental>(Messages.RentalNotFound);
+                return new ErrorDataResult<RentalReturnDto>(Messages.RentalNotFound);
             }
         }
 
-        [ValidationAspect(typeof(RentalValidator), Priority = 1)]
+        [ValidationAspect(typeof(RentalUpdateDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("IRentalService.Get", Priority = 3)]
-        public IResult Update(Rental rental)
+        public IResult Update(RentalUpdateDto rental)
         {
-            _rentalDal.Update(rental);
+            _rentalDal.Update(new Rental { Id = rental.Id, CarId = rental.CarId, CustomerId = rental.CustomerId, RentDate = rental.RentDate, ReturnDate = rental.ReturnDate });
             return new SuccessResult(Messages.RentalUpdated);
         }
 

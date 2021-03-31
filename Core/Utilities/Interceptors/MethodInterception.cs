@@ -25,13 +25,20 @@ namespace Core.Utilities.Interceptors
             }
             catch (ValidationException validationException)
             {
+                string errors = "";
+                foreach (var error in validationException.Errors)
+                {
+                    errors += error.ErrorMessage + "\n";
+                }
+
                 var returnType = invocation.Method.ReturnType;
                 if (returnType.GenericTypeArguments.Any())
                 {
-                    invocation.ReturnValue = Activator.CreateInstance(Type.GetType($"Core.Utilities.Results.ErrorDataResult`1[{returnType.GenericTypeArguments[0].FullName}]"), validationException.Message);
+                    invocation.ReturnValue = Activator.CreateInstance(Type.GetType($"Core.Utilities.Results.ErrorDataResult`1[{returnType.GenericTypeArguments[0].FullName}]"), errors);
                     return;
                 }
-                invocation.ReturnValue = new ErrorResult(validationException.Message);
+
+                invocation.ReturnValue = new ErrorResult(errors);
                 return;
             }
             catch (AuthorizationException authorizationException)
@@ -49,7 +56,15 @@ namespace Core.Utilities.Interceptors
             {
                 isSuccess = false;
                 OnException(invocation, e);
-                throw;
+
+                var returnType = invocation.Method.ReturnType;
+                if (returnType.GenericTypeArguments.Any())
+                {
+                    invocation.ReturnValue = Activator.CreateInstance(Type.GetType($"Core.Utilities.Results.ErrorDataResult`1[{returnType.GenericTypeArguments[0].FullName}]"), "Bir Hata Oluştu");
+                    return;
+                }
+                invocation.ReturnValue = new ErrorResult("Bir Hata Oluştu");
+                return;
             }
             finally
             {

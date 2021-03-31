@@ -11,10 +11,12 @@ namespace Business.ValidationRules.FluentValidation
         public UserForLoginDtoValidator()
         {
             RuleFor(u => u.Email)
-                .EmailAddress();
+                .EmailAddress()
+                .WithMessage("Mail Adresi Geçersiz");
 
             RuleFor(u => u.Password)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("Şifre Boş Olamaz");
         }
     }
 }

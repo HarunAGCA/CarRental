@@ -6,10 +6,14 @@ using System.Text;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    class AddCarDtoValidator:AbstractValidator<AddCarDto>
+    class UpdateCarDtoValidator:AbstractValidator<UpdateCarDto>
     {
-        public AddCarDtoValidator()
+        public UpdateCarDtoValidator()
         {
+            RuleFor(o => o.Id)
+                .NotEmpty()
+                .WithMessage("Id Boş Olamaz");
+
             RuleFor(o => o.Name)
                 .NotEmpty()
                 .WithMessage("Araç Adı Boş Olamaz");
@@ -33,7 +37,6 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(o => o.ModelYear)
                 .NotEmpty()
                 .WithMessage("Model Yılı Boş Olamaz");
-
         }
     }
 }

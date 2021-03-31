@@ -1,4 +1,5 @@
 ﻿using Entities.Concrete;
+using Entities.DTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -6,12 +7,13 @@ using System.Text;
 
 namespace Business.ValidationRules.FluentValidation
 {
-    class BrandValidator:AbstractValidator<Brand>
+    class BrandAddDtoValidator:AbstractValidator<BrandAddDto>
     {
-        public BrandValidator()
+        public BrandAddDtoValidator()
         {
             RuleFor(b => b.Name)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("Marka Adı Boş Olamaz");
         }
     }
 }

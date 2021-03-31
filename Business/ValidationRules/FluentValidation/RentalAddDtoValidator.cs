@@ -11,13 +11,16 @@ namespace Business.ValidationRules.FluentValidation
         public RentalAddDtoValidator()
         {
             RuleFor(o => o.CarId)
-                   .GreaterThan((short)0);
+                   .GreaterThan(0)
+                   .WithMessage("CarId Geçersiz");
 
             RuleFor(o => o.CustomerId)
-                .GreaterThan((short)0);
+                .GreaterThan(0)
+                .WithMessage("CustomerId Geçersiz");
 
             RuleFor(o => o.RentDate)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("Kiralama Tarihi Boş Olamaz");
         }
     }
 }

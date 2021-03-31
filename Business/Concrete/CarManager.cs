@@ -19,20 +19,28 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        
+
 
         public CarManager(ICarDal carDal)
         {
             _carDal = carDal;
         }
 
-        [ValidationAspect(typeof(CarValidator), Priority = 1)]
+        [ValidationAspect(typeof(AddCarDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("ICarService.Get", Priority = 2)]
         [SecuredOperation("admin")]
-        public IResult Add(Car car)
+        public IResult Add(AddCarDto car)
         {
-            _carDal.Add(car);
+            _carDal.Add(new Car
+            {
+                BrandId = car.BrandId,
+                ColorId = car.ColorId,
+                DailyPrice = car.DailyPrice,
+                Description = car.Description,
+                ModelYear = car.ModelYear,
+                Name = car.Name
+            });
 
             return new SuccessResult(Messages.CarAdded);
         }
@@ -42,7 +50,7 @@ namespace Business.Concrete
         [SecuredOperation("admin")]
         public IResult Delete(int id)
         {
-            if(_carDal.Get(c=>c.Id==id) == null)
+            if (_carDal.Get(c => c.Id == id) == null)
             {
                 return new ErrorResult(Messages.CarNotFound);
             }
@@ -51,43 +59,116 @@ namespace Business.Concrete
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetAll()
+        public IDataResult<List<CarReturnDto>> GetAll()
         {
-            var data = _carDal.GetList();
+            var cars = _carDal.GetList();
 
-            return new SuccessDataResult<List<Car>>(Messages.CarsListed,data);
+            List<CarReturnDto> data = new List<CarReturnDto>();
+            foreach (var car in cars)
+            {
+                data.Add(
+                    new CarReturnDto
+                    {
+                        Id = car.Id,
+                        BrandId = car.BrandId,
+                        ColorId = car.ColorId,
+                        DailyPrice = car.DailyPrice,
+                        Name = car.Name,
+                        Description = car.Description,
+                        ModelYear = car.ModelYear
+                    }
+                    );
+            }
+
+            return new SuccessDataResult<List<CarReturnDto>>(Messages.CarsListed, data);
         }
 
         [CacheAspect]
-        public IDataResult<Car> GetById(int id)
+        public IDataResult<CarReturnDto> GetById(int id)
         {
             var data = _carDal.Get(c => c.Id == id);
 
-            return new SuccessDataResult<Car>(Messages.CarReceived, data);
+            if (data == null)
+                return new ErrorDataResult<CarReturnDto>(Messages.CarNotFound);
+
+            CarReturnDto carReturnDto = new CarReturnDto
+            {
+                Id = data.Id,
+                BrandId = data.BrandId,
+                ColorId = data.ColorId,
+                ModelYear = data.ModelYear,
+                DailyPrice = data.DailyPrice,
+                Description = data.Description,
+                Name = data.Name
+            };
+
+            return new SuccessDataResult<CarReturnDto>(Messages.CarReceived, carReturnDto);
         }
 
         [CacheAspect]
         public IDataResult<CarDetailDto> GetCarDetail(int carId)
         {
             var data = _carDal.GetCarDetailByCarId(carId);
+            if (data == null)
+                return new ErrorDataResult<CarDetailDto>(Messages.CarNotFound);
 
-            return new SuccessDataResult<CarDetailDto>(Messages.ReceivedCarDetail, data);
+            return new SuccessDataResult<CarDetailDto>(data);
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByBrandId(short brandId)
+        public IDataResult<List<CarReturnDto>> GetCarsByBrandId(short brandId)
         {
-            var data = _carDal.GetList(c => c.BrandId == brandId);
+            var cars = _carDal.GetList(c => c.BrandId == brandId);
 
-            return new SuccessDataResult<List<Car>>(Messages.CarsListed,data);
+            if (cars == null)
+                return new ErrorDataResult<List<CarReturnDto>>(Messages.CarNotFound);
+
+            List<CarReturnDto> data = new List<CarReturnDto>();
+            foreach (var car in cars)
+            {
+                data.Add(
+                    new CarReturnDto
+                    {
+                        Id = car.Id,
+                        BrandId = car.BrandId,
+                        ColorId = car.ColorId,
+                        DailyPrice = car.DailyPrice,
+                        Name = car.Name,
+                        Description = car.Description,
+                        ModelYear = car.ModelYear
+                    }
+                    );
+            }
+
+            return new SuccessDataResult<List<CarReturnDto>>(data);
         }
 
         [CacheAspect]
-        public IDataResult<List<Car>> GetCarsByColorId(short colorId)
+        public IDataResult<List<CarReturnDto>> GetCarsByColorId(short colorId)
         {
-            var data = _carDal.GetList(c => c.ColorId == colorId);
+            var cars = _carDal.GetList(c => c.ColorId == colorId);
 
-            return new SuccessDataResult<List<Car>>(Messages.CarsListed, data);
+            if (cars == null)
+                return new ErrorDataResult<List<CarReturnDto>>(Messages.CarNotFound);
+
+            List<CarReturnDto> data = new List<CarReturnDto>();
+            foreach (var car in cars)
+            {
+                data.Add(
+                    new CarReturnDto
+                    {
+                        Id = car.Id,
+                        BrandId = car.BrandId,
+                        ColorId = car.ColorId,
+                        DailyPrice = car.DailyPrice,
+                        Name = car.Name,
+                        Description = car.Description,
+                        ModelYear = car.ModelYear
+                    }
+                    );
+            }
+
+            return new SuccessDataResult<List<CarReturnDto>>(data);
         }
 
         [CacheAspect]
@@ -96,13 +177,16 @@ namespace Business.Concrete
 
             var data = _carDal.GetCarsWithDetails();
 
-            return new SuccessDataResult<List<CarDetailDto>>(Messages.ReceivedCarsDetail, data);
+            if (data == null)
+                return new ErrorDataResult<List<CarDetailDto>>(Messages.CarNotFound);
+
+            return new SuccessDataResult<List<CarDetailDto>>(data);
         }
 
         public IDataResult<bool> IsExists(int carId)
         {
             var car = _carDal.Get(c => c.Id == carId);
-            if(car == null)
+            if (car == null)
             {
                 return new SuccessDataResult<bool>(false);
             }
@@ -110,13 +194,22 @@ namespace Business.Concrete
             return new SuccessDataResult<bool>(true);
         }
 
-        [ValidationAspect(typeof(CarValidator), Priority = 1)]
+        [ValidationAspect(typeof(UpdateCarDtoValidator), Priority = 1)]
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("ICarService.Get", Priority = 3)]
         [SecuredOperation("admin")]
-        public IResult Update(Car car)
+        public IResult Update(UpdateCarDto car)
         {
-            _carDal.Update(car);
+            _carDal.Update(new Car
+            {
+                Id = car.Id,
+                BrandId = car.BrandId,
+                ColorId = car.ColorId,
+                DailyPrice = car.DailyPrice,
+                Description = car.Description,
+                ModelYear = car.ModelYear,
+                Name = car.Name
+            });
 
             return new SuccessResult(Messages.CarUpdated);
         }

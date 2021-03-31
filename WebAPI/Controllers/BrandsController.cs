@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -32,9 +33,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get(short id)
         {
-            var result = _brandService.Get((short)id);
+            var result = _brandService.Get(id);
             if(!result.IsSuccess)
             {
                 return NotFound(result.Message);
@@ -44,9 +45,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(short id)
         {
-            var result = _brandService.Delete((short)id);
+            var result = _brandService.Delete(id);
             if (!result.IsSuccess)
             {
                 return BadRequest(result.Message);
@@ -55,7 +56,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Brand updatedBrand)
+        public IActionResult Update(BrandUpdateDto updatedBrand)
         {
             var result = _brandService.Update(updatedBrand);
             if (!result.IsSuccess)
@@ -69,7 +70,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult Add(string name)
         {
-            var result = _brandService.Add(new Brand { Name = name });
+            var result = _brandService.Add(new BrandAddDto { Name = name });
             if (!result.IsSuccess)
                 return BadRequest(result.Message);
 

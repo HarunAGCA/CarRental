@@ -29,17 +29,8 @@ namespace WebAPI.Controllers
         public IActionResult Add(AddCarDto carDto)
         {
 
-            var result = _carService.Add(
-                new Car
-                {
-                    BrandId = carDto.BrandId,
-                    ColorId = carDto.ColorId,
-                    DailyPrice = carDto.DailyPrice,
-                    Description = carDto.Description,
-                    ModelYear = carDto.ModelYear,
-                    Name = carDto.Name
-                }
-                );
+            var result = _carService.Add(carDto);
+
             if (result.IsSuccess == true)
             {
                 return Ok(result.Message);
@@ -67,7 +58,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Car car)
+        public IActionResult Update(UpdateCarDto car)
         {
             var result = _carService.Update(car);
             if (result.IsSuccess == true)
@@ -111,7 +102,7 @@ namespace WebAPI.Controllers
 
         }
         [HttpPost("Images/add")]
-        public IActionResult AddImage([FromForm]AddCarImageDto addCarImageDto)
+        public IActionResult AddImage([FromForm] AddCarImageDto addCarImageDto)
         {
 
             var result = _carImageService.Add(addCarImageDto);
@@ -138,7 +129,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("images/update")]
-        public IActionResult UpdateImage([FromForm]UpdateCarImageDto updateCarImageDto)
+        public IActionResult UpdateImage([FromForm] UpdateCarImageDto updateCarImageDto)
         {
             var result = _carImageService.Update(updateCarImageDto);
 
@@ -159,7 +150,7 @@ namespace WebAPI.Controllers
             }
 
             return Ok(result.Data);
-           
+
         }
         [HttpGet("images/byId/{id}")]
         public IActionResult GetImageById(int id)

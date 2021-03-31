@@ -21,24 +21,30 @@ namespace Business.Concrete
     class CarImageManager : ICarImageService
     {
         ICarImageDal _carImageDal;
+        ICarService _carService;
 
-        public CarImageManager(ICarImageDal carImageDal)
+        public CarImageManager(ICarImageDal carImageDal, ICarService carService)
         {
             _carImageDal = carImageDal;
+            _carService = carService;
         }
 
-        //TODO Test that if aspects are runnig by written order
         [TransactionScopeAspect(Priority = 2)]
         [CacheRemoveAspect("ICarImageService.Get", Priority = 3)]
         [ValidationAspect(typeof(AddCarImageDtoValidator), Priority = 1)]
         [SecuredOperation("admin")]
         public IResult Add(AddCarImageDto addCarImageDto)
         {
+
+            if (!_carService.IsExists(addCarImageDto.CarId).Data)
+            {
+                return new ErrorResult(Messages.CarNotFound);
+            }
+
             if (_carImageDal.GetList(c => c.CarId == addCarImageDto.CarId).Count + addCarImageDto.Images.Count > 5)
             {
                 return new ErrorResult(Messages.CarImageLimitExceeded);
             }
-
 
             string uniqueImageName;
 
@@ -59,9 +65,8 @@ namespace Business.Concrete
                     FileName = uniqueImageName,
                     UploadDate = DateTime.Now
                 });
-
-
             }
+
             return new SuccessResult(Messages.CarImagesAdded);
         }
 
@@ -77,6 +82,10 @@ namespace Business.Concrete
                 _carImageDal.Delete(imageToDelete);
                 ImageHelper.Delete(imageToDelete.FileName);
             }
+            else
+            {
+                return new ErrorResult(Messages.CarImageNotFound);
+            }
 
             return new SuccessResult(Messages.CarImageDeleted);
 
@@ -88,7 +97,7 @@ namespace Business.Concrete
         {
             var result = CheckIfCarHasNoImage(carId);
 
-            var failedResult = BusinessEngine.Run(result);
+            var failedResult = BusinessEngine.Run(_carService.IsExists(carId),result);
 
             if (failedResult != null)
             {

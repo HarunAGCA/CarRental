@@ -10,8 +10,8 @@ namespace Business.ValidationRules.FluentValidation
     {
         public AddCarImageDtoValidator()
         {
-            RuleFor(o => o.CarId).NotEmpty();
-            RuleFor(o => o.Images).NotEmpty();
+            RuleFor(o => o.CarId).NotEmpty().WithMessage("Araç Id Boş Olamaz"); 
+            RuleFor(o => o.Images).NotEmpty().WithMessage("En Az Bir Fotoğraf Seçilmeli");
         }
     }
 }

@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update(Rental rental)
+        public IActionResult Update(RentalUpdateDto rental)
         {
             var result = _rentalService.Update(rental);
 
@@ -58,14 +58,8 @@ namespace WebAPI.Controllers
         [HttpPost("rent")]
         public IActionResult Rent(RentalAddDto rentalAddDto)
         {
-            var rental = new Rental
-            {
-                CustomerId = rentalAddDto.CustomerId,
-                CarId = rentalAddDto.CarId,
-                RentDate = rentalAddDto.RentDate
-            };
 
-            var result = _rentalService.Add(rental);
+            var result = _rentalService.Add(rentalAddDto);
 
             if (!result.IsSuccess)
                 BadRequest(result.Message);

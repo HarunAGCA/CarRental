@@ -64,5 +64,7 @@ namespace Business.Constants
         internal static readonly string CarImageCouldNotAdded = "Araç Fotğrafı Eklenemedi";
         internal static readonly string CarImagesAdded = "Araç Fotoğrafları Eklendi";
         internal static readonly string CarImageCouldNotUpdated = "Araç Fotoğrafı Güncellenemedi";
+        internal static readonly string ColorAlreadyExists = "Renk Zaten Mevcut";
+        internal static readonly string BrandAlreadyExists = "Marka Zaten Mevcut";
     }
 }
