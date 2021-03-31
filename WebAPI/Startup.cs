@@ -16,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +69,16 @@ namespace WebAPI
                     Title = "Car Rental API Documentation",
                     Version = "0.1.0"
                 });
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
+
             });
         }
 
@@ -84,6 +96,13 @@ namespace WebAPI
 
             app.UseStaticFiles();
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI(option => {
+                option.SwaggerEndpoint("/swagger/CoreSwagger/swagger.json", "Swagger Car Rental");
+                option.RoutePrefix = string.Empty;
+            });
+
             app.UseAuthentication();
 
             app.UseAuthorization();
@@ -93,11 +112,7 @@ namespace WebAPI
                 endpoints.MapControllers();
             });
             
-            app.UseSwagger();
-            app.UseSwaggerUI(option => {
-                option.SwaggerEndpoint("/swagger/CoreSwagger/swagger.json", "Swagger Car Rental");
-                option.RoutePrefix = string.Empty;
-            });
+
         }
     }
 }

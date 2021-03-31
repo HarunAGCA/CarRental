@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -45,6 +46,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(short id)
         {
             var result = _brandService.Delete(id);
@@ -56,6 +58,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(BrandUpdateDto updatedBrand)
         {
             var result = _brandService.Update(updatedBrand);
@@ -68,6 +71,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(string name)
         {
             var result = _brandService.Add(new BrandAddDto { Name = name });

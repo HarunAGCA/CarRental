@@ -3,6 +3,7 @@ using Business.Constants;
 using Core.Utilities.FileHelper;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,6 +27,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddCarDto carDto)
         {
 
@@ -43,6 +45,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int Id)
         {
             var result = _carService.Delete(Id);
@@ -58,6 +61,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(UpdateCarDto car)
         {
             var result = _carService.Update(car);
@@ -101,7 +105,9 @@ namespace WebAPI.Controllers
             }
 
         }
+
         [HttpPost("Images/add")]
+        [Authorize]
         public IActionResult AddImage([FromForm] AddCarImageDto addCarImageDto)
         {
 
@@ -116,6 +122,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("images/delete/{id}")]
+        [Authorize]
         public IActionResult DeleteImage(int id)
         {
             var result = _carImageService.Delete(id);
@@ -129,6 +136,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("images/update")]
+        [Authorize]
         public IActionResult UpdateImage([FromForm] UpdateCarImageDto updateCarImageDto)
         {
             var result = _carImageService.Update(updateCarImageDto);

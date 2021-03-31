@@ -2,6 +2,7 @@
 using Entities;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -45,6 +46,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(RentalUpdateDto rental)
         {
             var result = _rentalService.Update(rental);
@@ -56,6 +58,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("rent")]
+        [Authorize]
         public IActionResult Rent(RentalAddDto rentalAddDto)
         {
 
@@ -69,6 +72,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("deliver")]
+        [Authorize]
         public IActionResult Deliver(RentalDeliverDto rentalDeliverDto)
         {
             var result = _rentalService.Deliver(rentalDeliverDto);

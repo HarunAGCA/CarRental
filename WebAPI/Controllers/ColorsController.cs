@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -45,6 +46,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(string colorName)
         {
             var result = _colorService.Add(new ColorAddDto { Name = colorName });
@@ -56,6 +58,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(ColorUpdateDto updatedColor)
         {
             var result = _colorService.Update(new ColorUpdateDto { Id = updatedColor.Id, Name = updatedColor.Name });
@@ -66,6 +69,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(short id)
         {
             var result = _colorService.Delete(id);
