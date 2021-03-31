@@ -1,5 +1,11 @@
 # Car Rental 
 
+#### Live at [Here](car-app-backend.herokuapp.com)
+
+For authorized operations 
+    -Mail : admin@example.com
+    -Password : admin123
+
 This repository contains codes of the Car Rental project. Car Rental is an implementation project of concepts and technologies that I have learned. These are:
 
 - OOP (Object Oriented Programming)
