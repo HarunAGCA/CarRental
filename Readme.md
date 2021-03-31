@@ -2,9 +2,11 @@
 
 #### Live at [Here](http://car-app-backend.herokuapp.com)
 
-For authorized operations 
-    -Mail : admin@example.com
-    -Password : admin123
+For authorized operations
+ - __Mail__ : admin@example.com
+ - __Password__ : admin123
+
+> :warning: Note: If you have an issue on uploading file. This is an issue of Swagger. You can try to use Postman instead of Swagger. 
 
 This repository contains codes of the Car Rental project. Car Rental is an implementation project of concepts and technologies that I have learned. These are:
 
