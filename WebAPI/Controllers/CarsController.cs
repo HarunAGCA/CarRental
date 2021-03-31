@@ -6,8 +6,10 @@ using Entities.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,11 +21,13 @@ namespace WebAPI.Controllers
     {
         ICarService _carService;
         ICarImageService _carImageService;
+        IConfiguration _configuration;
 
-        public CarsController(ICarService carService, ICarImageService carImageService)
+        public CarsController(ICarService carService, ICarImageService carImageService, IConfiguration configuration)
         {
             _carService = carService;
             _carImageService = carImageService;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -148,7 +152,7 @@ namespace WebAPI.Controllers
             return Ok(result.Message);
         }
 
-        [HttpGet("images/byCarId/{carid}")]
+        [HttpGet("images/byCarId/{carId}")]
         public IActionResult GetImagesByCarId(int carId)
         {
             var result = _carImageService.GetAllByCarId(carId);
@@ -156,7 +160,10 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(result.Message);
             }
-
+            foreach (var carImage in result.Data)
+            {
+                carImage.Path = Path.Combine(_configuration.GetValue<string>("DomainName"), carImage.Path).Replace("\\", "/");
+            }
             return Ok(result.Data);
 
         }
@@ -168,11 +175,9 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(result.Message);
             }
-
+            result.Data.Path = Path.Combine(_configuration.GetValue<string>("DomainName"), result.Data.Path).Replace("\\","/");
             return Ok(result.Data);
         }
-
-
 
     }
 }
