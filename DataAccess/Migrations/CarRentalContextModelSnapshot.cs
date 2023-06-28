@@ -3,8 +3,10 @@ using System;
 using DataAccess.Concrete.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
 
 namespace DataAccess.Migrations
 {
@@ -15,21 +17,23 @@ namespace DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.12")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Core.Entities.Concrete.OperationClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(500)")
-                        .HasMaxLength(500);
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
 
@@ -47,33 +51,34 @@ namespace DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsBlocked")
-                        .HasColumnType("boolean");
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -96,14 +101,15 @@ namespace DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("OperationClaimId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -126,13 +132,14 @@ namespace DataAccess.Migrations
                 {
                     b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -150,8 +157,9 @@ namespace DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<short>("BrandId")
                         .HasColumnType("smallint");
@@ -160,18 +168,18 @@ namespace DataAccess.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<decimal>("DailyPrice")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<short>("ModelYear")
                         .HasColumnType("smallint");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -218,18 +226,19 @@ namespace DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CarId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UploadDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -243,84 +252,84 @@ namespace DataAccess.Migrations
                             Id = 1,
                             CarId = 1,
                             FileName = "9c51a451-ac2b-4840-81cb-e9447bf97441.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 811, DateTimeKind.Local).AddTicks(5678)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8903)
                         },
                         new
                         {
                             Id = 2,
                             CarId = 1,
                             FileName = "62343bd3-b600-4911-ba92-a3e92460c91b.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6591)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8916)
                         },
                         new
                         {
                             Id = 3,
                             CarId = 1,
                             FileName = "e855898a-5e19-4e9e-82fa-421a884b353a.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6635)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8917)
                         },
                         new
                         {
                             Id = 4,
                             CarId = 1,
                             FileName = "f16ec7fb-bcfa-49b6-accc-87e92b6d3cc3.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6637)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8918)
                         },
                         new
                         {
                             Id = 5,
                             CarId = 2,
                             FileName = "3fa88654-2976-4cff-948c-e3e20c730c91.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6639)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8918)
                         },
                         new
                         {
                             Id = 6,
                             CarId = 2,
                             FileName = "7a6f413f-0d74-4584-89a2-ff7898a8623d.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6640)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8919)
                         },
                         new
                         {
                             Id = 7,
                             CarId = 2,
                             FileName = "2135828c-09f7-4c6a-a5df-3a137c9a138a.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6642)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8920)
                         },
                         new
                         {
                             Id = 8,
                             CarId = 2,
                             FileName = "ee9d8d7e-d89b-4d70-b012-4aa241fca70a.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6643)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8920)
                         },
                         new
                         {
                             Id = 9,
                             CarId = 3,
                             FileName = "33959098-8427-4200-bd6e-823c2890ff10.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6645)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8921)
                         },
                         new
                         {
                             Id = 10,
                             CarId = 3,
                             FileName = "c300ab97-d45f-439c-90b8-fd09a9426cc4.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6646)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8922)
                         },
                         new
                         {
                             Id = 11,
                             CarId = 3,
                             FileName = "2cca89e4-a7a4-44fe-b8ac-f50872a1395b.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6648)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8922)
                         },
                         new
                         {
                             Id = 12,
                             CarId = 3,
                             FileName = "af969d12-5a14-488d-8509-796efb2bd0b3.jpg",
-                            UploadDate = new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6649)
+                            UploadDate = new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8923)
                         });
                 });
 
@@ -328,12 +337,13 @@ namespace DataAccess.Migrations
                 {
                     b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -360,11 +370,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.Customer", b =>
                 {
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
@@ -382,20 +392,21 @@ namespace DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CarId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RentDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -411,7 +422,7 @@ namespace DataAccess.Migrations
                             Id = 1,
                             CarId = 2,
                             CustomerId = 1,
-                            RentDate = new DateTime(2021, 4, 3, 15, 30, 24, 831, DateTimeKind.Local).AddTicks(1659)
+                            RentDate = new DateTime(2023, 7, 3, 17, 2, 29, 233, DateTimeKind.Local).AddTicks(4856)
                         });
                 });
 
@@ -428,6 +439,10 @@ namespace DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OperationClaim");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Car", b =>
@@ -443,6 +458,10 @@ namespace DataAccess.Migrations
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("Entities.Concrete.CarImage", b =>
@@ -452,6 +471,8 @@ namespace DataAccess.Migrations
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Customer", b =>
@@ -461,6 +482,8 @@ namespace DataAccess.Migrations
                         .HasForeignKey("Entities.Concrete.Customer", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Rental", b =>
@@ -476,6 +499,20 @@ namespace DataAccess.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Core.Entities.Concrete.OperationClaim", b =>
+                {
+                    b.Navigation("UserOperationClaims");
+                });
+
+            modelBuilder.Entity("Core.Entities.Concrete.User", b =>
+                {
+                    b.Navigation("UserOperationClaims");
                 });
 #pragma warning restore 612, 618
         }

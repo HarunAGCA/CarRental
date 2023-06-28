@@ -1,20 +1,25 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
+
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace DataAccess.Migrations
 {
-    public partial class InitialCreate : Migration
+    /// <inheritdoc />
+    public partial class Initial : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Brands",
                 columns: table => new
                 {
-                    Id = table.Column<short>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(maxLength: 100, nullable: false)
+                    Id = table.Column<short>(type: "smallint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,9 +30,9 @@ namespace DataAccess.Migrations
                 name: "Colors",
                 columns: table => new
                 {
-                    Id = table.Column<short>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: false)
+                    Id = table.Column<short>(type: "smallint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,9 +43,9 @@ namespace DataAccess.Migrations
                 name: "OperationClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(maxLength: 500, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,14 +56,14 @@ namespace DataAccess.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(maxLength: 50, nullable: false),
-                    Email = table.Column<string>(nullable: false),
-                    PasswordHash = table.Column<byte[]>(nullable: false),
-                    PasswordSalt = table.Column<byte[]>(nullable: false),
-                    IsBlocked = table.Column<bool>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,14 +74,14 @@ namespace DataAccess.Migrations
                 name: "Cars",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BrandId = table.Column<short>(nullable: false),
-                    ColorId = table.Column<short>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    ModelYear = table.Column<short>(nullable: false),
-                    DailyPrice = table.Column<decimal>(nullable: false),
-                    Description = table.Column<string>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandId = table.Column<short>(type: "smallint", nullable: false),
+                    ColorId = table.Column<short>(type: "smallint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModelYear = table.Column<short>(type: "smallint", nullable: false),
+                    DailyPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,8 +104,8 @@ namespace DataAccess.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
-                    CompanyName = table.Column<string>(nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,10 +122,10 @@ namespace DataAccess.Migrations
                 name: "UserOperationClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<int>(nullable: false),
-                    OperationClaimId = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    OperationClaimId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,11 +148,11 @@ namespace DataAccess.Migrations
                 name: "CarImages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CarId = table.Column<int>(nullable: false),
-                    FileName = table.Column<string>(nullable: false),
-                    UploadDate = table.Column<DateTime>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -164,12 +169,12 @@ namespace DataAccess.Migrations
                 name: "Rentals",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CustomerId = table.Column<int>(nullable: false),
-                    CarId = table.Column<int>(nullable: false),
-                    RentDate = table.Column<DateTime>(nullable: false),
-                    ReturnDate = table.Column<DateTime>(nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    RentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -238,24 +243,24 @@ namespace DataAccess.Migrations
                 columns: new[] { "Id", "CarId", "FileName", "UploadDate" },
                 values: new object[,]
                 {
-                    { 1, 1, "9c51a451-ac2b-4840-81cb-e9447bf97441.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 811, DateTimeKind.Local).AddTicks(5678) },
-                    { 2, 1, "62343bd3-b600-4911-ba92-a3e92460c91b.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6591) },
-                    { 3, 1, "e855898a-5e19-4e9e-82fa-421a884b353a.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6635) },
-                    { 4, 1, "f16ec7fb-bcfa-49b6-accc-87e92b6d3cc3.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6637) },
-                    { 5, 2, "3fa88654-2976-4cff-948c-e3e20c730c91.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6639) },
-                    { 6, 2, "7a6f413f-0d74-4584-89a2-ff7898a8623d.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6640) },
-                    { 7, 2, "2135828c-09f7-4c6a-a5df-3a137c9a138a.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6642) },
-                    { 8, 2, "ee9d8d7e-d89b-4d70-b012-4aa241fca70a.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6643) },
-                    { 9, 3, "33959098-8427-4200-bd6e-823c2890ff10.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6645) },
-                    { 10, 3, "c300ab97-d45f-439c-90b8-fd09a9426cc4.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6646) },
-                    { 11, 3, "2cca89e4-a7a4-44fe-b8ac-f50872a1395b.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6648) },
-                    { 12, 3, "af969d12-5a14-488d-8509-796efb2bd0b3.jpg", new DateTime(2021, 3, 29, 15, 30, 24, 812, DateTimeKind.Local).AddTicks(6649) }
+                    { 1, 1, "9c51a451-ac2b-4840-81cb-e9447bf97441.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8903) },
+                    { 2, 1, "62343bd3-b600-4911-ba92-a3e92460c91b.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8916) },
+                    { 3, 1, "e855898a-5e19-4e9e-82fa-421a884b353a.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8917) },
+                    { 4, 1, "f16ec7fb-bcfa-49b6-accc-87e92b6d3cc3.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8918) },
+                    { 5, 2, "3fa88654-2976-4cff-948c-e3e20c730c91.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8918) },
+                    { 6, 2, "7a6f413f-0d74-4584-89a2-ff7898a8623d.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8919) },
+                    { 7, 2, "2135828c-09f7-4c6a-a5df-3a137c9a138a.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8920) },
+                    { 8, 2, "ee9d8d7e-d89b-4d70-b012-4aa241fca70a.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8920) },
+                    { 9, 3, "33959098-8427-4200-bd6e-823c2890ff10.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8921) },
+                    { 10, 3, "c300ab97-d45f-439c-90b8-fd09a9426cc4.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8922) },
+                    { 11, 3, "2cca89e4-a7a4-44fe-b8ac-f50872a1395b.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8922) },
+                    { 12, 3, "af969d12-5a14-488d-8509-796efb2bd0b3.jpg", new DateTime(2023, 6, 28, 17, 2, 29, 232, DateTimeKind.Local).AddTicks(8923) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Rentals",
                 columns: new[] { "Id", "CarId", "CustomerId", "RentDate", "ReturnDate" },
-                values: new object[] { 1, 2, 1, new DateTime(2021, 4, 3, 15, 30, 24, 831, DateTimeKind.Local).AddTicks(1659), null });
+                values: new object[] { 1, 2, 1, new DateTime(2023, 7, 3, 17, 2, 29, 233, DateTimeKind.Local).AddTicks(4856), null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarImages_CarId",
@@ -293,6 +298,7 @@ namespace DataAccess.Migrations
                 column: "UserId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

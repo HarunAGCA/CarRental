@@ -13,7 +13,7 @@ namespace DataAccess.Concrete.EntityFramework
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(ConnectionStringTool.GetConnectionStringFromHerokuContainer());
+            optionsBuilder.UseSqlServer(ConnectionStringTool.GetConnectionString("DEFAULT_CONNECTION_STRING"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
