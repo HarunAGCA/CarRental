@@ -1,6 +1,6 @@
 # Car Rental 
 
-#### Live at [Here](http://car-app-backend.herokuapp.com)
+#### Live at [Here](car-rental-api.azurewebsites.net)
 
 For authorized operations
  - __Mail__ : admin@example.com
