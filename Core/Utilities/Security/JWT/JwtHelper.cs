@@ -1,8 +1,9 @@
-﻿using Core.Entities.Concrete;
+﻿using Castle.Core.Configuration;
+using Core.Entities.Concrete;
 using Core.Extensions;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.Hashing;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,11 @@ namespace Core.Utilities.Security.JWT
 
     public class JwtHelper : ITokenHelper
     {
-        public IConfiguration Configuration { get; }
         private TokenOptions _tokenOptions;
         private DateTime _accessTokenExpiration;
-        public JwtHelper(IConfiguration configuration)
+        public JwtHelper(IOptions<TokenOptions> tokenOptions)
         {
-            Configuration = configuration;
-            _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
-
+            _tokenOptions = tokenOptions.Value;
         }
         public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
         {

@@ -57,6 +57,8 @@ namespace WebAPI
                 });
 
 
+            services.Configure<TokenOptions>(Configuration.GetRequiredSection("TokenOptions"));
+
             services.AddDependencyResolvers(new ICoreModule[]
             {
                 new CoreModule()
